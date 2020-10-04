@@ -19,7 +19,7 @@ it("ensures that a draft can be created and published", async () => {
     Object {
       "createDraft": Object {
         "body": "...",
-        "id": 2,
+        "id": 1,
         "published": false,
         "title": "Nexus",
       },
@@ -44,10 +44,21 @@ it("ensures that a draft can be created and published", async () => {
     Object {
       "publish": Object {
         "body": "...",
-        "id": 2,
+        "id": 1,
         "published": true,
         "title": "Nexus",
       },
     }
   `);
+  const persistedData = await ctx.db.post.findMany();
+  expect(persistedData).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "body": "...",
+          "id": 1,
+          "published": true,
+          "title": "Nexus",
+        },
+      ]
+   `);
 });
