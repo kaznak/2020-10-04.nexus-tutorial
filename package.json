@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@nexus/schema": "^0.16.0",
+    "@prisma/client": "^2.8.0",
     "apollo-server": "^2.18.1",
     "graphql": "^15.3.0"
   },
