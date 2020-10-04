@@ -1,6 +1,5 @@
 // api/graphql/Post.ts
 import { objectType, extendType, intArg, stringArg } from "@nexus/schema";
-import { Post as PostType } from "../db";
 
 export const PostQuery = extendType({
   type: "Query",
@@ -10,13 +9,13 @@ export const PostQuery = extendType({
       type: "Post",
       list: true,
       resolve(_root, _args, ctx) {
-        return ctx.db.posts.filter((p: PostType) => p.published === false);
+        return ctx.db.post.findMany({ where: { published: false } });
       },
     });
     t.list.field("posts", {
       type: "Post",
       resolve(_root, _args, ctx) {
-        return ctx.db.posts.filter((p: PostType) => p.published === true);
+        return ctx.db.post.findMany({ where: { published: true } });
       },
     });
   },
@@ -44,13 +43,11 @@ export const PostMutation = extendType({
       },
       resolve(_root, args, ctx) {
         const draft = {
-          id: ctx.db.posts.length + 1,
           title: args.title,
           body: args.body,
           published: false,
         };
-        ctx.db.posts.push(draft);
-        return draft;
+        return ctx.db.post.create({ data: draft });
       },
     });
     t.field("publish", {
@@ -59,14 +56,12 @@ export const PostMutation = extendType({
         draftId: intArg({ required: true }),
       },
       resolve(_root, args, ctx) {
-        let draftToPublish = ctx.db.posts.find(
-          (p: PostType) => p.id === args.draftId
-        );
-        if (!draftToPublish) {
-          throw new Error("Could not find draft with id " + args.draftId);
-        }
-        draftToPublish.published = true;
-        return draftToPublish;
+        return ctx.db.post.update({
+          where: { id: args.draftId },
+          data: {
+            published: true,
+          },
+        });
       },
     });
   },
