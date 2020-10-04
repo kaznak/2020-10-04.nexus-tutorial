@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "format": "prettier --write '**/*.{md,json,js,ts}'"
+  },
   "dependencies": {
     "@nexus/schema": "^0.16.0",
     "apollo-server": "^2.18.1",
