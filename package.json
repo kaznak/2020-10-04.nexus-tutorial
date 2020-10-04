@@ -6,7 +6,20 @@
   "scripts": {
     "format": "prettier --write '**/*.{md,json,js,ts}'",
     "dev": "ts-node-dev --transpile-only --no-notify api/app.ts",
+    "generate": "ts-node-dev api/schema.ts",
+    "test": "npm run generate && jest",
     "build": "tsc"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "globals": {
+      "ts-jest": {
+        "diagnostics": {
+          "warnOnly": true
+        }
+      }
+    },
+    "testEnvironment": "node"
   },
   "dependencies": {
     "@nexus/schema": "^0.16.0",
