@@ -1,5 +1,19 @@
 // api/graphql/Post.ts
-import { objectType } from "@nexus/schema";
+import { objectType, extendType } from "@nexus/schema";
+
+export const PostQuery = extendType({
+  type: "Query",
+  definition(t) {
+    t.field("drafts", {
+      nullable: false,
+      type: "Post",
+      list: true,
+      resolve() {
+        return [{ id: 1, title: "Nexus", body: "...", published: false }];
+      },
+    });
+  },
+});
 
 export const Post = objectType({
   name: "Post", // <- Name of your type
