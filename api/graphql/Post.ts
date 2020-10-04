@@ -1,5 +1,5 @@
 // api/graphql/Post.ts
-import { objectType, extendType, stringArg } from "@nexus/schema";
+import { objectType, extendType, intArg, stringArg } from "@nexus/schema";
 
 export const PostQuery = extendType({
   type: "Query",
@@ -10,6 +10,12 @@ export const PostQuery = extendType({
       list: true,
       resolve(_root, _args, ctx) {
         return ctx.db.posts.filter((p) => p.published === false);
+      },
+    });
+    t.list.field("posts", {
+      type: "Post",
+      resolve(_root, _args, ctx) {
+        return ctx.db.posts.filter((p) => p.published === true);
       },
     });
   },
@@ -44,6 +50,20 @@ export const PostMutation = extendType({
         };
         ctx.db.posts.push(draft);
         return draft;
+      },
+    });
+    t.field("publish", {
+      type: "Post",
+      args: {
+        draftId: intArg({ required: true }),
+      },
+      resolve(_root, args, ctx) {
+        let draftToPublish = ctx.db.posts.find((p) => p.id === args.draftId);
+        if (!draftToPublish) {
+          throw new Error("Could not find draft with id " + args.draftId);
+        }
+        draftToPublish.published = true;
+        return draftToPublish;
       },
     });
   },
