@@ -4,7 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "format": "prettier --write '**/*.{md,json,js,ts}'"
+    "format": "prettier --write '**/*.{md,json,js,ts}'",
+    "dev": "ts-node-dev --transpile-only --no-notify api/app.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "@nexus/schema": "^0.16.0",
